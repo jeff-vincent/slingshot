@@ -1,7 +1,5 @@
 import React from 'react';
 
-import uploadButton from "./uploadButton";
-
 export default class Display extends React.Component {
   constructor(props) {
     super(props);
