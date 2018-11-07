@@ -51,10 +51,10 @@ git clone git@github.com:jeffreyvincent/Slingshot.git
 
 Prerequisite package managers: [pip](https://pypi.org/project/pip/); [npm](https://www.npmjs.com/).
 
-First, create a [virtualenv](https://pypi.org/project/virtualenv/) that runs **Python3.6**, enter the `venv`, and then run the following:
+First, create a [virtualenv](https://pypi.org/project/virtualenv/) that runs Python3, enter the `venv`, and then run the following:
 
 ```bash
-make setup
+(sudo) pip install -r requirements.txt
 ```
 If you haven't already, create a Twilio account. Then select a phone number, and create a TwiML app as described at: 
 
@@ -69,13 +69,13 @@ If you're getting `CORS` errors, try using `ngrok`. You can find a handy install
 ##### Webpack build
  
 ```bash
-make build
+npm run build
 ```
     
 ##### Tests
 
 ```bash
-make test
+npm run tests
 ```
 
 ### Understanding Slingshot's Inner Workings
