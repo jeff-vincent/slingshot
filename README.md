@@ -67,6 +67,8 @@ If you're getting `CORS` errors, try using `ngrok`. You can find a handy install
 - [https://opensourcehacker.com/2015/03/27/testing-web-hook-http-api-callbacks-with-ngrok-in-python/](https://opensourcehacker.com/2015/03/27/testing-web-hook-http-api-callbacks-with-ngrok-in-python/)
 
 ##### Webpack build
+
+From within the Static directory, run:
  
 ```bash
 npm run build
