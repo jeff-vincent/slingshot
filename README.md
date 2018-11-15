@@ -42,10 +42,10 @@ Then, go to `localhost:8000` to view the docs.
 ##### Clone the repo
 
 ```bash
-git clone https://github.com/jeffreyvincent/Slingshot.git
+git clone https://github.com/jeff-vincent/Slingshot.git
 ```
 ```bash
-git clone git@github.com:jeffreyvincent/Slingshot.git
+git clone git@github.com:jeff-vincent/Slingshot.git
 ```
 ##### Install dependencies
 
