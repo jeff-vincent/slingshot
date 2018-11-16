@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jeffreyvincent/Slingshot"
+    "url": "git+https://github.com/jeff-vincent/Slingshot"
   },
   "author": "J.D. Vincent",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jeffreyvincent/Slingshot/issues"
+    "url": "https://github.com/jeff-vincent/Slingshot/issues"
   },
-  "homepage": "https://jeffreyvincent.github.io/Slingshot/",
+  "homepage": "https://jeff-vincent.github.io/Slingshot/",
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -33,5 +33,9 @@
       "es2015",
       "react"
     ]
+  },
+  "dependencies": {
+    "css-loader": "^1.0.1",
+    "style-loader": "^0.23.1"
   }
 }

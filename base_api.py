@@ -23,10 +23,10 @@ def _handle_answer(request):
 def _sign_up(request):
     # parse params
     # validate request
-    if user.good_signup_request(request):
-        return web_user
-    else:
-        return render_template('index.html')
+    #if user.good_signup_request(request):
+    return render_template('sign-up.html')
+#    else:
+#        return render_template('index.html')
 
 def _login(request):
     # parse params
