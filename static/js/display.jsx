@@ -6,7 +6,7 @@ class Display extends React.Component {
  }
 
  callAPI() {
-   return console.log("method called");
+   return render_template('sign-up.html');
  }
 
  render() {
@@ -17,7 +17,7 @@ class Display extends React.Component {
            <p>This is the display frame</p>
          </div>
          <button className="button margin-30" onClick={this.callAPI}>
-           This is a display selector
+           Update
          </button>
          <button className="button margin-30" onClick={this.callAPI}>
            This is a display selector
