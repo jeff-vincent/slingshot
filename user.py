@@ -6,8 +6,8 @@ import './config'
 """ Create a subaccount """
 
 def create_new_web_user(account_sid, auth_token):
-    account_sid = account_sid
-    auth_token = auth_token
+    account_sid = config.account_sid
+    auth_token = config.auth_token
     web_user = Client(account_sid, auth_token)
     return web_user
     
