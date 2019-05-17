@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from twilio import twiml
 import json
 
 # Slingshot modules
@@ -9,16 +10,25 @@ def _handle_answer():
     #create answer_object
     answer_object = {}
     #parse data
-    answer_object.data = flask.request.get('body')
-    answer_object.sms_user = flask.request.get('from')
-    answer_object.web_user_id = flask.request.get('to')
-    #get associated web_user
-    web_user = user.get_web_user(answer_object.web_user_id)
-    #check if data should be stored
-    if web_user.store_data == True:
-        web_user.current_session.current_question.answer_list.append(answer_object)
-    #thank the sms user for "weighing in"
-    return sms.auto_reply(request)
+    answer_object['data'] = request.form.get('Body')
+    answer_object['sms_user'] = request.form.get('From')
+    answer_object['web_user_id'] = request.form.get('To')
+
+    print(answer_object)
+
+    resp = twiml.Response()
+    resp.message('Hello {}, you said: {}'.format(answer_object.sms_user, answer_object.data))
+    print(resp)
+    return str(resp)
+
+    # return '...'
+    # #get associated web_user
+    # web_user = user.get_web_user(answer_object.web_user_id)
+    # #check if data should be stored
+    # if web_user.store_data == True:
+    #     web_user.current_session.current_question.answer_list.append(answer_object)
+    # #thank the sms user for "weighing in"
+    # return sms.auto_reply(request)
 
 def _sign_up():
     # parse params
@@ -29,7 +39,7 @@ def _sign_up():
 
     # create new user
     with open ('./users.txt', 'a') as users:
-        users.write(username + ' | ' + password)
+        users.write(username + ' | ' + password + '\n')
 
     print("<h2>Sign up Successful! Username: {} Password: {}</h2>".format(username, password))
     return '...'
