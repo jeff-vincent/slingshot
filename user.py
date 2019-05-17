@@ -1,7 +1,7 @@
 """ This is where user-related logic will live. """
 
 from twilio.rest import Client
-import './config'
+import config
 
 """ Create a subaccount """
 

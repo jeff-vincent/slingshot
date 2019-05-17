@@ -1,9 +1,0 @@
-
-services:
-  slingshot:
-    build: .
-    container_name: slingshot
-    ports:
-      - "5000:5000"
-    env_file:
-      - .dev.env

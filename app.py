@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 from twilio.twiml.messaging_response import MessagingResponse
+import base_api
 
 app = Flask(__name__, static_folder="static/dist", template_folder="static")
 
@@ -11,16 +12,16 @@ def render_index():
 
 @app.route('/sign-up', methods=['POST'])
 def sign_up():
-    return base_api._sign_up(request)
+    return base_api._sign_up()
 
 @app.route('/login', methods=['POST'])
 def login():
-    return base_api._login(request)
+    return base_api._login()
 
 @app.route('/{member_id}', methods=['GET'])
 def render_dashboard():
     # validate request
-    if utils._is_valid_request(request) == True:
+    if utils._is_valid_request() == True:
         return render_template('dashboard.html')
     else:
         return render_template('index.html')
@@ -28,15 +29,15 @@ def render_dashboard():
 @app.route('/{member_id}', methods=['POST'])
 def update_dashboard():
     # validate request
-    if utils._is_valid_request(request) == True:
-        return base_api._update_dashboard(request)
+    if utils._is_valid_request() == True:
+        return base_api._update_dashboard()
     else:
         return render_template('index.html')
 
 @app.route('/{member_id}/admin', methods=['GET'])
 def render_admin():
     # validate request
-    if utils._is_valid_request(request) == True:
+    if utils._is_valid_request() == True:
         return render_template('admin.html')
     else:
         return render_template('index.html')
@@ -44,7 +45,7 @@ def render_admin():
 @app.route('/{member_id}/admin', methods=['POST'])
 def update_admin():
     # validate request
-    if utils._is_valid_request(request) == True:
+    if utils._is_valid_request() == True:
         return base_api._update_admin(request)
     else:
         return render_template('index.html')
@@ -53,7 +54,7 @@ def update_admin():
 
 @app.route('/answer', methods=['POST'])
 def handle_answer():
-    return base_api._handle_answer(request)
+    return base_api._handle_answer()
 
 
 if __name__ == "__main__":
