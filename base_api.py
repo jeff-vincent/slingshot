@@ -45,8 +45,7 @@ def _sign_up():
         for row in users:
             if username and password in row:
                 return 'Sign-up Successful'
-            else:
-                return 'Well, that\'s awkward... Wanna try again?'
+    return 'Well, that\'s awkward... Wanna try again?'
     
 
 def _login():

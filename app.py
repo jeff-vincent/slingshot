@@ -19,16 +19,17 @@ def login():
     return base_api._login()
 
 @app.route('/user-status', methods=['POST'])
-def validate():
+def get_user_status():
+    logged_in = bool
     username = request.form.get('username')
-    # validate request
+    # check request's username against active_users
     with open('./active_users.txt', 'r') as active_users:
         for row in active_users:
             if username in row:
                 logged_in = True
             else:
                 logged_in = False
-    # handle request
+    # return user status
     if logged_in == True:
         return '{} is logged in.'.format(username)
     else:
