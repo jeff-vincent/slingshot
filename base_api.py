@@ -40,23 +40,27 @@ def _sign_up():
     # create new user
     with open ('./users.txt', 'a') as users:
         users.write(username + ' | ' + password + '\n')
-
-    print("<h2>Sign up Successful! Username: {} Password: {}</h2>".format(username, password))
-    return '...'
+    #confirm creation
+    with open('./users.txt', 'r') as users:
+        for row in users:
+            if username and password in row:
+                return 'Sign-up Successful'
+            else:
+                return 'Well, that\'s awkward... Wanna try again?'
+    
 
 def _login():
     # parse params
     username = request.form.get('username')
     password = request.form.get('password')
 
-    # validate request
-
-    # login
+    # validate
     with open('./users.txt', 'r') as users:
         for row in users:
             if username and password in row:
+                # login
                 with open('./active_users.txt', 'a') as active_users:
                     active_users.write(username + '\n')
-            else:
-                print('nah, suckah')
-    return '...'
+                # report result
+                return 'Login Successful'
+    return 'Please Sign-up'

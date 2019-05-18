@@ -18,13 +18,22 @@ def sign_up():
 def login():
     return base_api._login()
 
-@app.route('/{member_id}', methods=['GET'])
-def render_dashboard():
+@app.route('/user-status', methods=['POST'])
+def validate():
+    username = request.form.get('username')
     # validate request
-    if utils._is_valid_request() == True:
-        return render_template('dashboard.html')
+    with open('./active_users.txt', 'r') as active_users:
+        for row in active_users:
+            if username in row:
+                logged_in = True
+            else:
+                logged_in = False
+    # handle request
+    if logged_in == True:
+        return '{} is logged in.'.format(username)
     else:
-        return render_template('index.html')
+        return '{} is not logged in.'.format(username)
+        
 
 @app.route('/{member_id}', methods=['POST'])
 def update_dashboard():
