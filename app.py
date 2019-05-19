@@ -1,8 +1,9 @@
 from flask import Flask, request, render_template
 from twilio.twiml.messaging_response import MessagingResponse
+from config import app, db
 import base_api
 
-app = Flask(__name__, static_folder="static/dist", template_folder="static")
+
 
 """ Requests from web_user """
 
@@ -11,15 +12,15 @@ def render_index():
     return render_template('index.html')
 
 @app.route('/sign-up', methods=['POST'])
-def sign_up():
+def sign_up(db):
     return base_api._sign_up()
 
 @app.route('/login', methods=['POST'])
-def login():
+def login(db):
     return base_api._login()
 
 @app.route('/user-status', methods=['POST'])
-def get_user_status():
+def get_user_status(db):
     logged_in = bool
     username = request.form.get('username')
     # check request's username against active_users
@@ -34,7 +35,6 @@ def get_user_status():
         return '{} is logged in.'.format(username)
     else:
         return '{} is not logged in.'.format(username)
-        
 
 @app.route('/{member_id}', methods=['POST'])
 def update_dashboard():

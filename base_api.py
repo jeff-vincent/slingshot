@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template
+from flask_sqlalchemy import SQLAlchemy
 from twilio import twiml
+from config import app, db
 import json
 
 # Slingshot modules
@@ -30,7 +32,7 @@ def _handle_answer():
     # #thank the sms user for "weighing in"
     # return sms.auto_reply(request)
 
-def _sign_up():
+def _sign_up(db):
     # parse params
     username = request.form.get('username')
     password = request.form.get('password')
@@ -48,7 +50,7 @@ def _sign_up():
     return 'Well, that\'s awkward... Wanna try again?'
     
 
-def _login():
+def _login(db):
     # parse params
     username = request.form.get('username')
     password = request.form.get('password')
