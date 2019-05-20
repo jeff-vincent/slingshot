@@ -2,11 +2,11 @@ from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from twilio import twiml
 from config import app, db
+from models import Users
 import json
 
 # Slingshot modules
-import sms
-import user
+import sms, user, models
 
 def _handle_answer():
     #create answer_object
@@ -32,7 +32,7 @@ def _handle_answer():
     # #thank the sms user for "weighing in"
     # return sms.auto_reply(request)
 
-def _sign_up(db):
+def _sign_up():
     # parse params
     username = request.form.get('username')
     password = request.form.get('password')
@@ -49,8 +49,29 @@ def _sign_up(db):
                 return 'Sign-up Successful'
     return 'Well, that\'s awkward... Wanna try again?'
     
+def _create_db_user(db):
+    # parse params
+    username = request.form.get('username')
+    password = request.form.get('password')
 
-def _login(db):
+    new_user = Users(username=username, password=password)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    confirmed_user = db.session.query(Users).get(1)
+
+    if confirmed_user:
+        return 'Sign-up Successful'
+    return 'Well, that\'s awkward... Wanna try again?'
+
+
+
+
+
+
+
+def _login():
     # parse params
     username = request.form.get('username')
     password = request.form.get('password')
@@ -65,3 +86,4 @@ def _login(db):
                 # report result
                 return 'Login Successful'
     return 'Please Sign-up'
+

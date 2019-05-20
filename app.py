@@ -4,7 +4,6 @@ from config import app, db
 import base_api
 
 
-
 """ Requests from web_user """
 
 @app.route('/', methods=['GET'])
@@ -12,15 +11,19 @@ def render_index():
     return render_template('index.html')
 
 @app.route('/sign-up', methods=['POST'])
-def sign_up(db):
+def sign_up():
     return base_api._sign_up()
 
+@app.route('/sign-up-db', methods=['POST'])
+def sign_up_db():
+    return base_api._create_db_user(db)
+
 @app.route('/login', methods=['POST'])
-def login(db):
+def login():
     return base_api._login()
 
 @app.route('/user-status', methods=['POST'])
-def get_user_status(db):
+def get_user_status():
     logged_in = bool
     username = request.form.get('username')
     # check request's username against active_users
