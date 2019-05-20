@@ -46,7 +46,9 @@ def _sign_up():
     with open('./users.txt', 'r') as users:
         for row in users:
             if username and password in row:
+
                 return 'Sign-up Successful'
+
     return 'Well, that\'s awkward... Wanna try again?'
     
 def _create_db_user(db):
@@ -54,15 +56,20 @@ def _create_db_user(db):
     username = request.form.get('username')
     password = request.form.get('password')
 
+    # Instantiate user object
     new_user = Users(username=username, password=password)
 
+    # Submit user object to db
     db.session.add(new_user)
     db.session.commit()
 
+    # Confirm creation of new user in db
     confirmed_user = db.session.query(Users).get(new_user.user_id)
 
     if confirmed_user:
+
         return 'Sign-up Successful. User ID:{}'.format(confirmed_user.user_id)
+
     return 'Well, that\'s awkward... Wanna try again?'
 
 def _delete_db_user(db):
@@ -70,12 +77,20 @@ def _delete_db_user(db):
     username = request.form.get('username')
     password = request.form.get('password')
 
+    # get user to be deleted
     delete_user = db.session.query(Users).filter_by(username=username).first()
 
-    db.session.delete(delete_user)
-    db.session.commit()
+    # Validate
+    if delete_user.password == password:
 
-    return 'Deleted: {}'.format(delete_user)
+        # Delete User
+        db.session.delete(delete_user)
+        db.session.commit()
+
+        return 'Deleted: {}'.format(delete_user)
+
+    # If validation fails,  alert the user.
+    return 'There was a problem authenticating your request.'
 
 def _login():
     # parse params
