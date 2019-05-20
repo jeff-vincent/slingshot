@@ -59,17 +59,23 @@ def _create_db_user(db):
     db.session.add(new_user)
     db.session.commit()
 
-    confirmed_user = db.session.query(Users).get(1)
+    confirmed_user = db.session.query(Users).get(new_user.user_id)
 
     if confirmed_user:
-        return 'Sign-up Successful'
+        return 'Sign-up Successful. User ID:{}'.format(confirmed_user.user_id)
     return 'Well, that\'s awkward... Wanna try again?'
 
+def _delete_db_user(db):
+    # parse params
+    username = request.form.get('username')
+    password = request.form.get('password')
 
+    delete_user = db.session.query(Users).filter_by(username=username).first()
 
+    db.session.delete(delete_user)
+    db.session.commit()
 
-
-
+    return 'Deleted: {}'.format(delete_user)
 
 def _login():
     # parse params
