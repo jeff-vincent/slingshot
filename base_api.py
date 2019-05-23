@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from twilio import twiml
 from config import app, db
-from models import Users
+from models import User
 import json
 
 # Slingshot modules
@@ -57,18 +57,18 @@ def _create_db_user(db):
     password = request.form.get('password')
 
     # Instantiate user object
-    new_user = Users(username=username, password=password)
+    new_user = User(username=username, password=password)
 
     # Submit user object to db
     db.session.add(new_user)
     db.session.commit()
 
     # Confirm creation of new user in db
-    confirmed_user = db.session.query(Users).get(new_user.user_id)
+    confirmed_user = db.session.query(User).get(new_user.id)
 
     if confirmed_user:
 
-        return 'Sign-up Successful. User ID:{}'.format(confirmed_user.user_id)
+        return 'Sign-up Successful. User ID:{}'.format(confirmed_user.id)
 
     return 'Well, that\'s awkward... Wanna try again?'
 
@@ -78,7 +78,7 @@ def _delete_db_user(db):
     password = request.form.get('password')
 
     # get user to be deleted
-    delete_user = db.session.query(Users).filter_by(username=username).first()
+    delete_user = db.session.query(User).filter_by(username=username).first()
 
     # Validate
     if delete_user.password == password:
