@@ -22,6 +22,10 @@ def sign_up_db():
 def delete_user_db():
     return base_api._delete_db_user(db)
 
+@app.route('/login-user-db', methods=['POST'])
+def login_user_db():
+    return base_api._login_db_user(db)
+
 @app.route('/login', methods=['POST'])
 def login():
     return base_api._login()

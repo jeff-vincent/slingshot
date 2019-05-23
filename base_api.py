@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from twilio import twiml
 from config import app, db
 from models import User
-import json
+import json, random
 
 # Slingshot modules
 import sms, user, models
@@ -73,11 +73,11 @@ def _create_db_user(db):
     return 'Well, that\'s awkward... Wanna try again?'
 
 def _delete_db_user(db):
-    # parse params
+    # Parse params
     username = request.form.get('username')
     password = request.form.get('password')
 
-    # get user to be deleted
+    # Get user to be deleted
     delete_user = db.session.query(User).filter_by(username=username).first()
 
     # Validate
@@ -91,6 +91,29 @@ def _delete_db_user(db):
 
     # If validation fails,  alert the user.
     return 'There was a problem authenticating your request.'
+
+def _login_db_user(db):
+    # Parse params
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    # Get user to be logged in
+    user = db.session.query(User).filter_by(username=username).first()
+
+    # Validate
+    if user.password and user.password == password:
+
+        # Create Session ID
+        session_id = random.randint(10000000000000000000,99999999999999999999)
+        
+        # Update user's session ID in db
+        #user['session_id'] = session_id
+
+        return 'Session ID: {}'.format(session_id)
+
+    # If validation fails,  alert the user.
+    return 'There was a problem authenticating your request.'
+
 
 def _login():
     # parse params
