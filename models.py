@@ -4,7 +4,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(10), unique=True, nullable=False)
     password = db.Column(db.String(10), unique=True, nullable=False)
-    # qa = db.Column(db.foreign)
+    session_id = db.Column(db.Integer)
     def __repr__(self):
         return '<User %r>' % self.username
 

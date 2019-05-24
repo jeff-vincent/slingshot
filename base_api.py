@@ -55,9 +55,10 @@ def _create_db_user(db):
     # parse params
     username = request.form.get('username')
     password = request.form.get('password')
+    session_id = 00000000000
 
     # Instantiate user object
-    new_user = User(username=username, password=password)
+    new_user = User(username=username, password=password, session_id=session_id)
 
     # Submit user object to db
     db.session.add(new_user)
@@ -104,10 +105,13 @@ def _login_db_user(db):
     if user.password and user.password == password:
 
         # Create Session ID
-        session_id = random.randint(10000000000000000000,99999999999999999999)
+        session_id = random.randint(1000000000,2147483647)
         
         # Update user's session ID in db
-        #user['session_id'] = session_id
+        user.session_id = session_id
+
+        # Submit user object to db
+        db.session.commit()
 
         return 'Session ID: {}'.format(session_id)
 
