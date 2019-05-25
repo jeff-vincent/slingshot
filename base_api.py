@@ -55,7 +55,7 @@ def _create_db_user(db):
     # parse params
     username = request.form.get('username')
     password = request.form.get('password')
-    session_id = 00000000000
+    session_id = ''
 
     # Instantiate user object
     new_user = User(username=username, password=password, session_id=session_id)
@@ -127,7 +127,7 @@ def _log_out_db_user(db):
     user = db.session.query(User).filter_by(session_id=session_id).first()
 
     # Reset Session ID to Falsy
-    session_id = 00000000000
+    session_id = ''
         
     # Update user's session ID in db
     user.session_id = session_id
@@ -144,9 +144,12 @@ def _ask_question(db):
 
     # Authenticate request
     if session_id:
+        try:
+            # Get user
+            user = db.session.query(User).filter_by(session_id=session_id).first()
 
-        # Get user
-        user = db.session.query(User).filter_by(session_id=session_id).first()
+        except:
+            return 'Please log in.'
 
         # Instantiate question object
         question = Question(question=question, user_id=user.id, correct_answer=correct_answer)

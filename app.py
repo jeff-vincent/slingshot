@@ -13,6 +13,7 @@ def render_index():
 
 
 """ Write to local file """
+
 @app.route('/sign-up', methods=['POST'])
 def sign_up():
     return base_api._sign_up()
@@ -39,32 +40,48 @@ def get_user_status():
         return '{} is not logged in.'.format(username)
 
 
+
+
 """ Write to MySQL """
-@app.route('/sign-up-db', methods=['POST'])
+
+
+""" ----- User Stuff ----- """
+
+@app.route('/signup-db', methods=['POST'])
 def sign_up_db():
     return base_api._create_db_user(db)
 
-@app.route('/delete-db-user', methods=['POST'])
+@app.route('/delete-db', methods=['POST'])
 def delete_user_db():
     return base_api._delete_db_user(db)
 
-@app.route('/login-db-user', methods=['POST'])
+@app.route('/login-db', methods=['POST'])
 def login_user_db():
     return base_api._login_db_user(db)
 
-@app.route('/logout-db-user', methods=['POST'])
+@app.route('/logout-db', methods=['POST'])
 def logout_user_db():
     return base_api._logout_db_user(db)
 
-@app.route('/question', methods=['POST'])
+
+
+""" ----- Question and Answer Stuff ----- """
+
+@app.route('/ask-question', methods=['POST'])
 def ask_question():
     return base_api._ask_question(db)
 
-""" Requests from sms_user (Twilio) """
-
 @app.route('/answer', methods=['POST'])
 def handle_answer():
-    return base_api._handle_answer()
+    return base_api._answer()
+
+
+
+# """ Requests from sms_user (Twilio) """
+
+# @app.route('/answer', methods=['POST'])
+# def handle_answer():
+#     return base_api._handle_answer()
 
 
 if __name__ == "__main__":
