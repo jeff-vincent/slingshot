@@ -113,7 +113,7 @@ def _ask_question(db):
         # Instantiate question object
         question = Question(question=question, user_id=user.id, correct_answer=correct_answer, closed=False)
         
-        # Add question to db user object
+        # Submit question object to db
         db.session.add(question)
         db.session.commit()
 
