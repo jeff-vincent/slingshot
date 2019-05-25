@@ -10,21 +10,12 @@ import base_api
 def render_index():
     return render_template('index.html')
 
+
+
+""" Write to local file """
 @app.route('/sign-up', methods=['POST'])
 def sign_up():
     return base_api._sign_up()
-
-@app.route('/sign-up-db', methods=['POST'])
-def sign_up_db():
-    return base_api._create_db_user(db)
-
-@app.route('/delete-user-db', methods=['POST'])
-def delete_user_db():
-    return base_api._delete_db_user(db)
-
-@app.route('/login-user-db', methods=['POST'])
-def login_user_db():
-    return base_api._login_db_user(db)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -47,29 +38,27 @@ def get_user_status():
     else:
         return '{} is not logged in.'.format(username)
 
-@app.route('/{member_id}', methods=['POST'])
-def update_dashboard():
-    # validate request
-    if utils._is_valid_request() == True:
-        return base_api._update_dashboard()
-    else:
-        return render_template('index.html')
 
-@app.route('/{member_id}/admin', methods=['GET'])
-def render_admin():
-    # validate request
-    if utils._is_valid_request() == True:
-        return render_template('admin.html')
-    else:
-        return render_template('index.html')
+""" Write to MySQL """
+@app.route('/sign-up-db', methods=['POST'])
+def sign_up_db():
+    return base_api._create_db_user(db)
 
-@app.route('/{member_id}/admin', methods=['POST'])
-def update_admin():
-    # validate request
-    if utils._is_valid_request() == True:
-        return base_api._update_admin(request)
-    else:
-        return render_template('index.html')
+@app.route('/delete-db-user', methods=['POST'])
+def delete_user_db():
+    return base_api._delete_db_user(db)
+
+@app.route('/login-db-user', methods=['POST'])
+def login_user_db():
+    return base_api._login_db_user(db)
+
+@app.route('/logout-db-user', methods=['POST'])
+def logout_user_db():
+    return base_api._logout_db_user(db)
+
+@app.route('/question', methods=['POST'])
+def ask_question():
+    return base_api._ask_question(db)
 
 """ Requests from sms_user (Twilio) """
 

@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from twilio import twiml
 from config import app, db
-from models import User
+from models import User, Question, Answer
 import json, random
 
 # Slingshot modules
@@ -140,21 +140,24 @@ def _ask_question(db):
     # Parse params
     session_id = request.form.get('session_id')
     question = request.form.get('question')
-    answer_list = []
+    correct_answer = request.form.get('correct_answer')
 
-    # Validate
-    if session_id == True:
+    # Authenticate request
+    if session_id:
 
         # Get user
         user = db.session.query(User).filter_by(session_id=session_id).first()
 
         # Instantiate question object
-        question = Question(question=question, answer_list=answer_list)
+        question = Question(question=question, user_id=user.id, correct_answer=correct_answer)
         
         # Add question to db user object
         db.session.add(question)
-        
+        db.session.commit()
 
+        return 'Question {} posed.'.format(question.id)
+        
+    return 'There was an error submitting your question.'
 
 def _login():
     # parse params
