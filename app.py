@@ -71,9 +71,9 @@ def logout_user_db():
 def ask_question():
     return base_api._ask_question(db)
 
-@app.route('/answer', methods=['POST'])
+@app.route('/answer-question', methods=['POST'])
 def handle_answer():
-    return base_api._answer()
+    return base_api._answer_question(db)
 
 
 
