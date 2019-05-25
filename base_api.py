@@ -88,7 +88,7 @@ def _delete_db_user(db):
         db.session.delete(delete_user)
         db.session.commit()
 
-        return 'Deleted: {}'.format(delete_user)
+        return 'Deleted: {}'.format(delete_user.username)
 
     # If validation fails,  alert the user.
     return 'There was a problem authenticating your request.'
@@ -97,26 +97,63 @@ def _login_db_user(db):
     # Parse params
     username = request.form.get('username')
     password = request.form.get('password')
-
+    
     # Get user to be logged in
     user = db.session.query(User).filter_by(username=username).first()
 
-    # Validate
+    # Authenticate
     if user.password and user.password == password:
 
         # Create Session ID
         session_id = random.randint(1000000000,2147483647)
         
-        # Update user's session ID in db
+        # Set Session ID on user object
         user.session_id = session_id
 
         # Submit user object to db
         db.session.commit()
 
-        return 'Session ID: {}'.format(session_id)
+        return 'Session ID:{}'.format(session_id)
 
-    # If validation fails,  alert the user.
+    # If auth fails, alert the user.
     return 'There was a problem authenticating your request.'
+
+def _log_out_db_user(db):
+    # Parse params
+    session_id = request.form.get('session_id')
+
+    # Get user to be logged out. Using .first() on top of unique usernames 
+    # for increased performance. 
+    user = db.session.query(User).filter_by(session_id=session_id).first()
+
+    # Reset Session ID to Falsy
+    session_id = 00000000000
+        
+    # Update user's session ID in db
+    user.session_id = session_id
+    db.session.commit()
+
+    return 'Logged out: {}'.format(user.username)
+
+
+def _ask_question(db):
+    # Parse params
+    session_id = request.form.get('session_id')
+    question = request.form.get('question')
+    answer_list = []
+
+    # Validate
+    if session_id == True:
+
+        # Get user
+        user = db.session.query(User).filter_by(session_id=session_id).first()
+
+        # Instantiate question object
+        question = Question(question=question, answer_list=answer_list)
+        
+        # Add question to db user object
+        db.session.add(question)
+        
 
 
 def _login():
