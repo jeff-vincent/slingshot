@@ -103,17 +103,17 @@ def _ask_question(db):
 
     # Authenticate request
     if session_id:
-        try:
-            # Get user
-            user = db.session.query(User).filter_by(session_id=session_id).first()
+    
+        # Get user
+        user = db.session.query(User).filter_by(session_id=session_id).first()
 
-        except:
+        if not user:
             return 'Please log in.'
 
         # Instantiate question object
         question = Question(question=question, user_id=user.id, correct_answer=correct_answer, closed=False)
         
-        # Submit question object to db
+        # Add question to db user object
         db.session.add(question)
         db.session.commit()
 
@@ -131,22 +131,19 @@ def _answer_question(db):
     web_user = db.session.query(User).filter_by(phone_number=to_number).first()
 
     # Get last question web_user asked
-    question = db.session.query(Question).filter_by(user_id=web_user.id).first()
+    question = db.session.query(Question).filter_by(user_id=web_user.id).all()
+    
+    question_id = question[-1].id
 
-    # Check if question is still answerable
-    if question.closed == False:
-        question_id = question.id
+    # Instantiate Answer object
+    answer = Answer(answer=answer, to_number=to_number, from_number=from_number, question_id=question_id)
 
-        # Instantiate Answer object
-        answer = Answer(answer=answer, to_number=to_number, from_number=from_number, question_id=question_id)
+    # Add answer to db
+    db.session.add(answer)
+    db.session.commit()
 
-        # Add answer to db
-        db.session.add(answer)
-        db.session.commit()
+    return 'Answer submitted.'
 
-        return 'Answer submitted.'
-    else:
-        return 'The question is closed.'
 
 
 """ Write to local text file """
