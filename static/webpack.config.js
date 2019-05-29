@@ -4,8 +4,9 @@ const config = {
   entry: __dirname + '/js/index.jsx',
 
   output: {
-    path: __dirname + '/dist',
+    path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
+    publicPath: '/public/'
   },
 
   resolve: {
