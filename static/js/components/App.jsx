@@ -1,14 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
+import NameForm from './signUp'
+
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-  }
 
+  }
   render() {
     return (
       <div >
-        <p>Test</p>
+        <NameForm/>
     	</div>)
   }
 }
