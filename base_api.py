@@ -11,11 +11,12 @@ from models import User, Question, Answer
 
 def _create_db_user(db):
     # parse params
-    username = request.form.get('username')
-    password = request.form.get('password')
-    phone_number = request.form.get('phone_number')
+    content = request.json
+    username = content['username']
+    password = content['password']
+    phone_number = content['phone_number']
     
-    session_id = 1
+    session_id = 0
 
     # Instantiate user object
     new_user = User(username=username, password=password, session_id=session_id, phone_number=phone_number)
