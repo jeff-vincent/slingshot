@@ -73,7 +73,7 @@ def _login_db_user(db):
         # Submit user object to db
         db.session.commit()
 
-        return 'Session ID:{}'.format(session_id)
+        return 'Session ID:{}'.format(session_id), render_template('home.html')
 
     # If auth fails, alert the user.
     return 'There was a problem authenticating your request.'

@@ -1,5 +1,7 @@
 import React from 'react';
-import NameForm from './signUp'
+import SignUpForm from './signUp'
+import LogInForm from './logIn'
+
 
 
 class App extends React.Component {
@@ -10,7 +12,8 @@ class App extends React.Component {
   render() {
     return (
       <div >
-        <NameForm/>
+        <LogInForm/>
+        <SignUpForm/>
     	</div>)
   }
 }
