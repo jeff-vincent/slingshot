@@ -1,11 +1,13 @@
 import React from 'react'
+import axios from 'axios'
 
 class logInForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      sessionID: ''
     };
 
     this.handleUsername = this.handleUsername.bind(this);
@@ -22,12 +24,21 @@ class logInForm extends React.Component {
   }
 
   handleSubmit(event) {
+
     const data = {
-      'Username' : this.state.username,
-      'Password' : this.state.password
+      'username' : this.state.username,
+      'password' : this.state.password
     }
     console.log(data)
+    axios.post('/login-db', data)
+    .then(response => {
+      if (response.data) {
+        localStorage.setItem('sessionID', response.data)
+      }
+    })
     event.preventDefault();
+    console.log(localStorage.getItem('sessionID'))
+    
   }
 
   render() {

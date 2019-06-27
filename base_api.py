@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from twilio import twiml
@@ -16,10 +16,13 @@ def _create_db_user(db):
     password = content['password']
     phone_number = content['phone_number']
     
-    session_id = 0
-
+    session_id = random.randint(1000000000,2147483647)
+    
     # Instantiate user object
-    new_user = User(username=username, password=password, session_id=session_id, phone_number=phone_number)
+    new_user = User(username=username, 
+                    password=password, 
+                    session_id=session_id, 
+                    phone_number=phone_number)
 
     # Submit user object to db
     db.session.add(new_user)
@@ -36,8 +39,9 @@ def _create_db_user(db):
 
 def _delete_db_user(db):
     # Parse params
-    username = request.form.get('username')
-    password = request.form.get('password')
+    content = request.json
+    username = content['username']
+    password = content['password']
 
     # Get user to be deleted
     delete_user = db.session.query(User).filter_by(username=username).first()
@@ -56,8 +60,9 @@ def _delete_db_user(db):
 
 def _login_db_user(db):
     # Parse params
-    username = request.form.get('username')
-    password = request.form.get('password')
+    content = request.json
+    username = content['username']
+    password = content['password']
     
     # Get user to be logged in
     user = db.session.query(User).filter_by(username=username).first()
@@ -74,7 +79,7 @@ def _login_db_user(db):
         # Submit user object to db
         db.session.commit()
 
-        return 'Session ID:{}'.format(session_id), render_template('home.html')
+        return str(session_id)
 
     # If auth fails, alert the user.
     return 'There was a problem authenticating your request.'

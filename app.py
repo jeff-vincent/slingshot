@@ -10,6 +10,10 @@ import base_api
 def render_index():
     return render_template('index.html')
 
+@app.route('/app', methods=['GET'])
+def render_app():
+    return render_template('app.html')
+
 
 
 """ Write to local file """
