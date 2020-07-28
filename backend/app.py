@@ -1,14 +1,16 @@
-from flask import Flask
-from pymongo import Mongo
+from quart import Quart
+from motor.motor_asyncio import AsyncIOMotorClient
+from config import mongo_uri
 
-MONGO_URI = ''
 
-app = Flask(__name__)
-mongo = Mongo(MONGO_URI)
+app = Quart(__name__)
+client = AsyncIOMotorClient(mongo_uri)
+
+users_collection = client.db.users
 
 
 @app.route('/', methods=['GET'])
-def index():
+async def index():
     return 'index'
 
 
