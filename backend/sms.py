@@ -1,7 +1,7 @@
 import asyncio
 from quart import session
 from twilio_client import client
-from app import users_collection
+from app import messages_collection
 from config import account_sid, auth_token
 
 
@@ -32,9 +32,14 @@ class IncomingSMS:
 
 
     def parse_sms_callback(self):
-        pass
+        data = {
+          "recipient_sms_number": self.sms_object.to_number,
+          "prompt": session['prompt'],
+          "response": self.sms_object.body
+        }
+        self.write_to_db(data)
 
 
-    def write_to_db(self):
-        pass
+    def write_to_db(self, kwargs**):
+        message_id = messages_collection.insert(data)
 

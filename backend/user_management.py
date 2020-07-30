@@ -13,6 +13,12 @@ class UserManagement:
         self.request = request
         self.users_collection = users_collection
 
+
+    async def get_user(self, username):
+        user = await self.users_collection.find_one(
+            {'username': username})
+
+
     async def signup(self):
         try:
             form = await self.request.form
@@ -20,38 +26,42 @@ class UserManagement:
             password = await form.get('password')
             payment_type = await form.get('payment_type')
             cc_number = await form.get('cc_number')
+            area_code = await form.get('area_code')
 
         except Exception as e:
             return 'There was a problem parsing your request.\
              Error message: {}'.format(str(e))
         
         
-        user = await self.users_collection.find_one({'username': username})
+        user = await self.get_user(username)
         
         if user:
             return 'Sorry, but that username is already taken.\
              Please choose a different username.'
 
         hashed_password = await generate_password_hash(password)
-        twilio = CreateTwilioAccount(username)
+        twilio = CreateTwilioAccount(             
+            area_code=area_code, 
+            friendly_name=username)
 
         try:
             twilio_user = await twilio.create_user_account()
         except:
             return 'Twilio error'
         
-        user_id = await self.users_collection.insert({'username': username,   
-                                        'password': hashed_password,
-                                        'date_joined': datetime.datetime.utcnow(),
-                                        'sms_number': twilio_user['sms_number'],
-                                        'sid': twilio_user['sid'], 
-                                        'payment': {
-                                        'type': payment_type,
-                                        'cc_number': cc_number,
-                                        'trial': True
-                                        }})
+        user_id = await self.users_collection.insert({
+            'username': username,   
+            'password': hashed_password,
+            'date_joined': datetime.datetime.utcnow(),
+            'sms_number': twilio_user['sms_number'],
+            'sid': twilio_user['sid'], 
+            'payment': {
+            'type': payment_type,
+            'cc_number': cc_number,
+            'trial': True
+            }})
         
-        user = await self.users_collection.find_one({'username': username})
+        user = await self.get_user(username)
         data = {
             'username': user['username'],
             'date_joined': user['date_joined'],
@@ -71,7 +81,7 @@ class UserManagement:
              Error message: {}'.format(str(e))
 
         try:
-            user = await self.users_collection.find_one({'username': username})
+            user = await self.get_user(username)
             
             if check_password_hash(user['password'],  password):
                 sms_number = user['sms_number']
