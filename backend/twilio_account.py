@@ -26,8 +26,9 @@ class CreateTwilioAccount:
 
     async def _get_available_sms_number(self, user_sid):
         params = { 
-            area_code=session['area_code'],
-            sms_enabled=True}
+            'area_code'=session['area_code'],
+            'sms_enabled'=True, 
+            'user_sid'=user_sid}
 
         response = await self.async_http.post(
             base_uri=twilio_current_sms_numbers_base_uri,
