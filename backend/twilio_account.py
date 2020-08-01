@@ -15,15 +15,30 @@ class CreateTwilioAccount:
 
 
     async def create_user_account(self):
+        """A method for creating a system user account.
+        Args:
+            self: an instance of the CreateTwilioAccount class
+        """
+        # probably blocking call via sdk
         user_account = await client.api.accounts.create(
             friendly_name=self.friendly_name)
         
         user_sid = user_account.sid
-        sms_number = await self._get_available_sms_number(user_sid)
-        return {'sms_number':sms_number, 'sid': user_sid}
+        signed_up_user = await self._get_sms_user(user_sid)
+        return signed_up_user
 
 
-    async def _get_available_sms_number(self, user_sid):
+    async def _get_sms_user(self, user_sid):
+        """A private method for getting a list of available,
+        sms-enabled phone numbers in a given area code. Calls
+        private helper methods to complete the process of 
+        purchasing a number from the list, and assigning 
+        it to the Twilio subaccount.
+        NOTE: the area code is set on the session.
+        Args:
+            self: an instance of the CreateTwilioAccount class
+            user_sid: string
+        """
         params = { 
             'area_code'=session['area_code'],
             'sms_enabled'=True, 
@@ -39,6 +54,12 @@ class CreateTwilioAccount:
 
 
     async def _purchase_sms_number(self, user_sid, sms_number):
+        """A private method for purchasing a given sms-enabled number.
+        Args:
+            self: an instance of the CreateTwilioAccount class
+            user_sid: string
+            sms_number: string: the sms number to buy
+        """
         response = await self.async_http.post(
             base_uri=twilio_purchase_sms_number_base_uri, 
             sms_number=sms_number,
@@ -48,6 +69,13 @@ class CreateTwilioAccount:
 
 
     async def _assign_sms_number_to_user(self, user_sid, sms_number):
+        """A private method for assigning a sms-enabled number 
+        to a Twilio subaccount.
+        Args:
+            self: an instance of the CreateTwilioAccount class
+            user_sid: string
+            sms_number: string: the number that was just purchased.
+        """
         response = await client.incoming_phone_numbers(sms_number) \
             .update(account_sid=user_sid)
         return response

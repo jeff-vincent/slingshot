@@ -1,6 +1,6 @@
 import asyncio
 import datetime
-from quart import session, jsonify
+from quart import request, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from twilio_account import CreateTwilioAccount
 
@@ -53,7 +53,7 @@ class UserManagement:
 
 
     async def _augment_sign_up_data(self, request_data, twilio_user):
-        """A method for augmenting a new user recofd with Twilio 
+        """A method for augmenting a new user record with Twilio 
         and other peripheral data. 
         Args:
             self: an instance of the UserManagement class
@@ -65,7 +65,8 @@ class UserManagement:
         request_data['password'] = hashed_password  
         request_data['date_joined']: datetime.datetime.utcnow(),
         request_data['sms_number']: twilio_user['sms_number'],
-        request_data['sid']: twilio_user['sid'], 
+        request_data['sid']: twilio_user['sid']
+        return request_data
 
 
     async def signup(self):
@@ -87,13 +88,13 @@ class UserManagement:
              Please choose a different username.'
 
         # create Twilio subaccount
-        twilio = CreateTwilioAccount(area_code=area_code,friendly_name=username)
+        twilio = CreateTwilioAccount(friendly_name=username)
         try:
             twilio_user = await twilio.create_user_account()
         except:
             return 'Twilio error'
 
-        # create user and associate Twilio subaccount 
+        # create system user and associate Twilio subaccount 
         request_data = self._augment_sign_up_data(request_data, twilio_user)
         user_id = await self.users_collection.insert(request_data)
         return_data = await self._strip_sensitive_fields(request_data)
