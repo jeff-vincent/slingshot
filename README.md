@@ -19,14 +19,14 @@ Upon receipt of the request, the sender's phone number (or any other reliable un
 
   - Front End ([React](https://reactjs.org))
   
-  - Back End ([Flask](http://flask.pocoo.org/))
+  - Back End ([Quart](https://gitlab.com/pgjones/quart))
 
 - [Understanding Slingshot's Inner Workings]()
 
 
 ### API   
 
-- All the information you need to make requests to the Slingshot API.
+...
 
 ### Viewing & Building the Docs
 
@@ -51,7 +51,7 @@ git clone git@github.com:jeff-vincent/Slingshot.git
 
 Prerequisite package managers: [pip](https://pypi.org/project/pip/); [npm](https://www.npmjs.com/).
 
-First, create a [virtualenv](https://pypi.org/project/virtualenv/) that runs Python3, enter the `venv`, and then run the following:
+First, create a [virtualenv](https://pypi.org/project/virtualenv/) that runs Python3.7+, enter the `venv`, and then run the following:
 
 ```bash
 (sudo) pip install -r requirements.txt
@@ -60,25 +60,6 @@ If you haven't already, create a Twilio account. Then select a phone number, and
 
 - [https://www.twilio.com/console/sms/runtime/twiml-apps/add](https://www.twilio.com/console/sms/runtime/twiml-apps/add)
   
-##### Gotchas
-
-If you're getting `CORS` errors, try using `ngrok`. You can find a handy install and basic use guide at: 
-
-- [https://opensourcehacker.com/2015/03/27/testing-web-hook-http-api-callbacks-with-ngrok-in-python/](https://opensourcehacker.com/2015/03/27/testing-web-hook-http-api-callbacks-with-ngrok-in-python/)
-
-##### Webpack build
-
-From within the Static directory, run:
- 
-```bash
-npm run build
-```
-    
-##### Tests
-
-```bash
-npm run tests
-```
 
 ### Understanding Slingshot's Inner Workings
 
@@ -92,26 +73,20 @@ Incoming requests are handled by a universal HTTP API.
 
 ##### Controllers
 
-These modules currently house the logic for classes ``user``, ``sms``, and ``session``. 
+...
 
 ##### Models
 
-The models are very simple. A ``session_object`` is instantiated at "go". Each question posed is a new key in that dict., and the unsorted list of ``answer_objects`` is the associated value. 
+...
 
 -----------------------------------------------------
 
 ##### License
 
-Copyright 2018 J.D. Vincent
+Copyright 2020 Jeffrey D. Vincent
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-    http://www.apache.org/licenses/LICENSE-2.0
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

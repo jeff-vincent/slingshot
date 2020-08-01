@@ -70,7 +70,7 @@ class UserManagement:
 
 
     async def signup(self):
-        """ A method for signing up for the service. 
+        """A method for signing up for the service. 
         Args:
             self: an instance of the UserManagement class
         """

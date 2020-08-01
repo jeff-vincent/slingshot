@@ -3,6 +3,7 @@ from quart import request
 from motor.motor_asyncio import AsyncIOMotorClient
 from config import mongo_uri
 from user_management import UserManagement
+from sms import IncomingSMS
 
 app = Quart(__name__)
 client = AsyncIOMotorClient(mongo_uri)
@@ -36,6 +37,24 @@ async def login():
 		return login.json()
 	else:
 		return 'Error. Sign up here.'
+
+
+@app.route('/incoming-sms', methods=['POST'])
+async def handle_incoming_sms():
+	incoming_sms = IncomingSMS(request)
+	handled_request = await incoming_sms.handle_sms_callback()
+	return handled_request.json()
+
+
+@app.route('/set-prompt', methods=['POST'])
+async def set_prompt():
+	pass
+
+# TODO: @admin functionality
+@app.route('/get-billable-users', methods=['GET'])
+async def get_billable_users():
+	pass
+
 
 
 if __name__ == '__main__':
