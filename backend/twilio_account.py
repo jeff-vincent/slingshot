@@ -20,8 +20,7 @@ class CreateTwilioAccount:
         
         user_sid = user_account.sid
         sms_number = await self._get_available_sms_number(user_sid)
-        return {'sms_number':sms_number,
-                'sid': user_sid}
+        return {'sms_number':sms_number, 'sid': user_sid}
 
 
     async def _get_available_sms_number(self, user_sid):
