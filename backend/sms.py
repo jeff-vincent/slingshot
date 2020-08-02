@@ -1,17 +1,15 @@
 import asyncio
 from quart import session
-from twilio_client import client
 from app import messages_collection
 from config import account_sid, auth_token
+from config import twilio_send_sms_base_uri
+from async_http import AsyncHTTP
 
 
 class OutgoingSMS:
    
     def __init__(self):
-        self.admin_client = client
-        self.user_client = client(account_sid, 
-                            auth_token, 
-                            session['sid'])
+        self.async_http = AsyncHTTP()
 
 
     async def send_sms(self, body, to):
@@ -21,12 +19,19 @@ class OutgoingSMS:
         body: string: 
         to: string: recepient sms number
       """
+        request_uri = twilio_send_sms_base_uri.format(
+          auth_token=auth_token)
+
+        params = {
+          'from':session['sms_number'],
+          'body':body,
+          'to':to
+          }
+
         try:
-            message = await self.user_client.messages.create(
-                                  from_= session['sms_number'],
-                                  body=body,
-                                  to=to
-                              )
+            message = await self.async_http.post(
+                                  base_uri=request_uri,
+                                  params=params)
             return 'message sent'
         except:
             return 'message failed'

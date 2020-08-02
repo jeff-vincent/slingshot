@@ -1,10 +1,10 @@
 import asyncio
 import subprocess
 from quart import session
-from twilio_client import client
 from async_http import AsyncHTTP
-from config import twilio_current_sms_numbers_base_uri
+from config import twilio_available_sms_numbers_base_uri
 from config import twilio_purchase_sms_number_base_uri
+from config import auth_token
 
 
 class CreateTwilioAccount:
@@ -39,16 +39,12 @@ class CreateTwilioAccount:
             self: an instance of the CreateTwilioAccount class
             user_sid: string
         """
-        params = { 
-            'area_code'=session['area_code'],
-            'sms_enabled'=True, 
-            'user_sid'=user_sid}
+        request_uri = twilio_available_sms_numbers_base_uri.format(
+            auth_token=auth_token)
 
-        response = await self.async_http.post(
-            base_uri=twilio_current_sms_numbers_base_uri,
-            params=params)
+        response = await self.async_http.get(base_uri=request_uri)
 
-        sms_number = response.available_numbers[0]
+        sms_number = response.available_phone_numbers[0].friendly_name
         response = await self._purchase_sms_number(user_sid, sms_number)
         return response
 
@@ -60,10 +56,12 @@ class CreateTwilioAccount:
             user_sid: string
             sms_number: string: the sms number to buy
         """
+        params = {'phone_number':sms_number}
+        request_uri = twilio_purchase_sms_number_base_uri.format(
+            auth_token=auth_token)
         response = await self.async_http.post(
-            base_uri=twilio_purchase_sms_number_base_uri, 
-            sms_number=sms_number,
-            user_sid=user_sid)
+            base_uri=request_uri, 
+            params=params)
         response = await self._assign_sms_number_to_user(user_sid, sms_number)
         return response
 
