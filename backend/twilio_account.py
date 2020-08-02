@@ -4,7 +4,10 @@ from quart import session
 from async_http import AsyncHTTP
 from config import twilio_available_sms_numbers_base_uri
 from config import twilio_purchase_sms_number_base_uri
+from config import twilio_create_subaccount_base_uri
+from config import twilio_assign_new_number_base_uri
 from config import auth_token
+from config import admin_sid
 
 
 class CreateTwilioAccount:
@@ -19,12 +22,23 @@ class CreateTwilioAccount:
         Args:
             self: an instance of the CreateTwilioAccount class
         """
-        # probably blocking call via sdk
-        user_account = await client.api.accounts.create(
-            friendly_name=self.friendly_name)
+        params = {
+            'friendly_name': self.friendly_name,
+            'auth_token': auth_token
+            }
+
+        request_uri = twilio_create_subaccount_base_uri
+
+        user_account = await self.async_http.post(
+            base_uri=request_uri,
+            params=params)
         
         user_sid = user_account.sid
-        signed_up_user = await self._get_sms_user(user_sid)
+        try:
+            signed_up_user = await self._get_sms_user(user_sid)
+        except Exception as e:
+            raise 'Twilio sign up error: {}'.format(str(e))
+        
         return signed_up_user
 
 
@@ -43,9 +57,10 @@ class CreateTwilioAccount:
             auth_token=auth_token)
 
         response = await self.async_http.get(base_uri=request_uri)
-
         sms_number = response.available_phone_numbers[0].friendly_name
+
         response = await self._purchase_sms_number(user_sid, sms_number)
+        
         return response
 
 
@@ -59,10 +74,13 @@ class CreateTwilioAccount:
         params = {'phone_number':sms_number}
         request_uri = twilio_purchase_sms_number_base_uri.format(
             auth_token=auth_token)
+
         response = await self.async_http.post(
             base_uri=request_uri, 
             params=params)
+
         response = await self._assign_sms_number_to_user(user_sid, sms_number)
+        
         return response
 
 
@@ -74,6 +92,18 @@ class CreateTwilioAccount:
             user_sid: string
             sms_number: string: the number that was just purchased.
         """
-        response = await client.incoming_phone_numbers(sms_number) \
-            .update(account_sid=user_sid)
+        params = {
+            'phone_number':sms_number,
+            'auth_token': auth_token,
+            'AddressSid': user_sid
+            }
+
+        request_uri = twilio_assign_new_number_base_uri.format(
+            admin_sid=admin_sid,
+            sms_number=sms_number)
+
+        response = await self.async_http.post(
+            base_uri=request_uri, 
+            params=params)
+
         return response

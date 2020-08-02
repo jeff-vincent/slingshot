@@ -22,13 +22,13 @@
 	    	return data
 
 
-	    async def get(self, base_uri, headers=None):
+	    async def get(self, base_uri, headers=None, params=None):
 	    	"""A convenience wrapper for async http GET requests.
 	    	Args:
 				self: an instance of the AsyncHTTP class
 				base_uri: string
 				headers: dict: optional
-				params: dict
+				params: dict: optional
 	    	"""
 		    async with aiohttp.ClientSession() as session:
 		        async with session.get(base_uri, 
