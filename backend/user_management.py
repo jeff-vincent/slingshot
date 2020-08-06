@@ -3,23 +3,25 @@ import datetime
 from quart import request, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from twilio_account import CreateTwilioAccount
-
+from db_connector import MotorQuery
 
 class UserManagement:
 
     def __init__(self, request, users_collection):
         self.request = request
         self.users_collection = users_collection
+        self.motor_query = MotorQuery()
+        self.get_user = self.motor_query.get_user()
 
 
-    async def get_user(self, username):
-        """A method for getting a user record by username.
-        Args:
-            self: an instance of the UserManagement class
-            username: string
-        """
-        user = await self.users_collection.find_one({'username': username})
-        return user
+    # async def get_user(self, username):
+    #     """A method for getting a user record by username.
+    #     Args:
+    #         self: an instance of the UserManagement class
+    #         username: string
+    #     """
+    #     user = await self.users_collection.find_one({'username': username})
+    #     return user
 
 
     async def _parse_sign_up_request(self):

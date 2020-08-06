@@ -1,12 +1,12 @@
 from quart import Quart
 from quart import request
-from motor.motor_asyncio import AsyncIOMotorClient
+
 from config import mongo_uri
 from user_management import UserManagement
 from sms import IncomingSMS
 
 app = Quart(__name__)
-client = AsyncIOMotorClient(mongo_uri)
+
 
 users_collection = client.db.users
 user_management = UserManagement()
@@ -47,6 +47,7 @@ async def handle_incoming_sms():
 
 
 @app.route('/set-prompt', methods=['POST'])
+# set time/datestamped prompt on user
 async def set_prompt():
 	pass
 

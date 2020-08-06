@@ -1,6 +1,9 @@
-admin_sid = ''
-auth_token = ''
-mongo_uri = ''
+from os import environ
+
+MONGO_URI = environ.get('MONGO_URI')
+
+admin_sid = environ.get('ADMIN_SID')
+auth_token = environ.get('AUTH_TOKEN')
 
 twilio_available_sms_numbers_base_uri = \
 'https://api.twilio.com/2010-04-01/Accounts/{auth_token}/AvailablePhoneNumbers/US/Mobile.json?PageSize=1'
