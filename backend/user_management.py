@@ -3,7 +3,7 @@ import datetime
 from quart import request, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from twilio_account import CreateTwilioAccount
-from db_connector import MotorQuery
+from db.db_connector import MotorQuery
 
 class UserManagement:
 
@@ -65,8 +65,8 @@ class UserManagement:
         """
         hashed_password = await generate_password_hash(request_data['password'])
         request_data['password'] = hashed_password  
-        request_data['date_joined']: datetime.datetime.utcnow(),
-        request_data['sms_number']: twilio_user['sms_number'],
+        request_data['date_joined']: datetime.datetime.utcnow()
+        request_data['sms_number']: twilio_user['sms_number']
         request_data['sid']: twilio_user['sid']
         return request_data
 

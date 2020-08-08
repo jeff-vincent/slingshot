@@ -1,8 +1,9 @@
 # db.py
+from os import environ
 from kafka import KafkaProducer
-from backend.config import MONGO_URI
 from motor.motor_asyncio import AsyncIOMotorClient
 
+MONGO_URI = environ.get('MONGO_URI')
 
 
 class KafkaPublish:

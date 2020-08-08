@@ -1,15 +1,10 @@
 from quart import Quart
 from quart import request
 
-from config import mongo_uri
 from user_management import UserManagement
 from sms import IncomingSMS
 
 app = Quart(__name__)
-
-
-users_collection = client.db.users
-user_management = UserManagement()
 
 
 @app.route('/', methods=['GET'])
@@ -50,6 +45,7 @@ async def handle_incoming_sms():
 # set time/datestamped prompt on user
 async def set_prompt():
 	pass
+
 
 # TODO: @admin functionality
 @app.route('/get-billable-users', methods=['GET'])
