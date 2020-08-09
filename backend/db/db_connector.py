@@ -3,7 +3,8 @@ from os import environ
 from kafka import KafkaProducer
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGO_URI = environ.get('MONGO_URI')
+# MONGO_URI = environ.get('MONGO_URI')
+MONGO_URI = 'mongodb+srv://jeff:AsspWord@cluster0-qnmim.mongodb.net/media?retryWrites=true&w=majority'
 
 
 class KafkaPublish:

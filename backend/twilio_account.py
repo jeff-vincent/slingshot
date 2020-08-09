@@ -28,6 +28,8 @@ class CreateTwilioAccount:
             }
 
         request_uri = twilio_create_subaccount_base_uri
+        print(request_uri)
+        print(params)
 
         user_account = await self.async_http.post(
             base_uri=request_uri,
@@ -37,7 +39,7 @@ class CreateTwilioAccount:
         try:
             signed_up_user = await self._get_sms_user(user_sid)
         except Exception as e:
-            raise 'Twilio sign up error: {}'.format(str(e))
+            print('Twilio sign up error: {}'.format(str(e)))
         
         return signed_up_user
 

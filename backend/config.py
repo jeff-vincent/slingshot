@@ -1,6 +1,8 @@
 from os import environ
 
-MONGO_URI = environ.get('MONGO_URI')
+# MONGO_URI = environ.get('MONGO_URI')
+
+MONGO_URI = 'mongodb+srv://jeff:AsspWord@cluster0-qnmim.mongodb.net/media?retryWrites=true&w=majority'
 
 admin_sid = environ.get('ADMIN_SID')
 auth_token = environ.get('AUTH_TOKEN')

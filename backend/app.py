@@ -17,8 +17,12 @@ async def sign_up():
 	if request.method == 'GET':
 		return 'Sign up here.'
 	elif request.method == 'POST':
-		sign_up = await user_management.sign_up(request)
-		return sign_up.json()
+		request_dict = await request.form
+		print(request_dict)
+		user_management = UserManagement(request_dict)
+		sign_up = await user_management.sign_up()
+		print(sign_up)
+		return sign_up
 	else:
 		return 'Error. Sign up here.'
 
